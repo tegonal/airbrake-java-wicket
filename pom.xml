@@ -40,6 +40,11 @@
 			<artifactId>airbrake-java</artifactId>
 			<version>2.2.9-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.tegonal.components.wicket</groupId>
+			<artifactId>wicket-components</artifactId>
+			<version>1.0.10-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
