@@ -3,8 +3,8 @@ package airbrake;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.WicketRuntimeException;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -18,22 +18,22 @@ public class WicketAirbrakeAppender extends AirbrakeAppender {
     AirbrakeNoticeBuilderUsingFilteredSystemProperties noticeBuilder = new AirbrakeNoticeBuilderUsingFilteredSystemProperties(
         apiKey, backtrace, throwable, env);
     
-    AuthenticatedWebSession authenticatedWebSession = null;
+    Session websession = null;
     try {
-      authenticatedWebSession = AuthenticatedWebSession.get();
-    } catch (WicketRuntimeException wre) {
-
+      websession = Session.get();
+    } catch (WicketRuntimeException | ClassCastException e) {
+        //ok, we tried it all.
     }
 
-    if (authenticatedWebSession != null) {
+    if (websession != null) {
       Map<String, Object> sessiontMap = new HashMap<String, Object>();
-      for(String attributeName : authenticatedWebSession.getAttributeNames()) {
-        sessiontMap.put(attributeName, authenticatedWebSession.getAttribute(attributeName));
+      for(String attributeName : websession.getAttributeNames()) {
+        sessiontMap.put(attributeName, websession.getAttribute(attributeName));
       }
       noticeBuilder.session(sessiontMap);
       
-      if(authenticatedWebSession instanceof DbAuthenticatedWebSessionIF) {
-        DbAuthenticatedWebSessionIF dbAuthenticatedWebSession = (DbAuthenticatedWebSessionIF) authenticatedWebSession;
+      if(websession instanceof DbAuthenticatedWebSessionIF) {
+        DbAuthenticatedWebSessionIF dbAuthenticatedWebSession = (DbAuthenticatedWebSessionIF) websession;
         WebUserIF webUser = dbAuthenticatedWebSession.getWebUser();
         if (webUser != null) {
           noticeBuilder.setUser(webUser.getUserIdentification(),
