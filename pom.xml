@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>com.tegonal.components.wicket</groupId>
 			<artifactId>wicket-components</artifactId>
-			<version>1.0.10-SNAPSHOT</version>
+			<version>3.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<build>
